@@ -140,6 +140,9 @@ Dashboard dokter hanya menampilkan data miliknya sendiri:
 
 ---
 
+<details>
+<summary><strong>📖 Dokumen Lengkap</strong> — Cara Menjalankan, Struktur Folder, Database, Endpoint, Keamanan & lainnya</summary>
+
 ## 1. Cara Menjalankan
 
 Prasyarat: **Node.js 20.19+ atau 22.12+** (syarat Vite 8), **MySQL 8** berjalan di
@@ -673,3 +676,5 @@ Invoke-RestMethod -Uri "http://localhost:3000/api/users" -Headers @{ Authorizati
 - Simpan diff nilai pada `audit_log` + halaman pemulihan data.
 - Upload lampiran hasil lab (PDF/gambar) pada rekam medis.
 - Dockerfile + demo online, serta pipeline CI untuk build dan uji API.
+
+</details>
