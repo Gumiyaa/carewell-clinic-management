@@ -2,8 +2,7 @@
 
 Aplikasi manajemen klinik full-stack: **Vue 3 + Vite + Tailwind CSS v4** (frontend) dan **Node.js + Express + MySQL** (backend).
 
-![Carewell](image.png)
-
+![Carewell]
 ## Fitur
 
 | Modul | Kemampuan |
