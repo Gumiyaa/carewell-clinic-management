@@ -24,14 +24,6 @@ const run = async () => {
 
   // ---- users ----
   const hash = await bcrypt.hash('admin123', 10)
-  await pool.query(
-    `INSERT INTO users (name, email, password_hash, role, avatar_color) VALUES (?,?,?,?,?)`,
-    ['Olivia Martin', 'admin@carewell.test', hash, 'admin', '#188C85']
-  )
-  await pool.query(
-    `INSERT INTO users (name, email, password_hash, role, avatar_color) VALUES (?,?,?,?,?)`,
-    ['Dr. Sarah Wilson', 'sarah@carewell.test', hash, 'doctor', '#0EA5E9']
-  )
 
   // ---- departments ----
   const depts = [
@@ -60,6 +52,21 @@ const run = async () => {
     await pool.query(
       `INSERT INTO doctors (department_id, name, specialization, email, phone, status) VALUES (?,?,?,?,?,?)`,
       d
+    )
+  }
+
+  // ---- users (auth) ----
+  // Dibuat SETELAH doctors supaya akun dokter bisa ditautkan ke doctor_id.
+  // Tanpa tautan ini, requireDoctorLink akan menolak login dokter (fail-closed).
+  const users = [
+    ['Olivia Martin', 'admin@carewell.test', 'admin', null, '#188C85'],
+    ['Dr. Sarah Wilson', 'sarah@carewell.test', 'doctor', 1, '#0EA5E9'],
+    ['Rina Resepsionis', 'staff@carewell.test', 'staff', null, '#F59E0B'],
+  ]
+  for (const u of users) {
+    await pool.query(
+      `INSERT INTO users (name, email, password_hash, role, doctor_id, avatar_color) VALUES (?,?,?,?,?,?)`,
+      [u[0], u[1], hash, u[2], u[3], u[4]]
     )
   }
 
