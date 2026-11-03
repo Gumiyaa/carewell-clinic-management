@@ -62,13 +62,31 @@ Isi `.env`:
 ```env
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=
+DB_USER=carewell
+DB_PASSWORD=carewell123
 DB_NAME=carewell_clinic
 PORT=3000
 JWT_SECRET=ganti-dengan-secret-acak-yang-kuat
 JWT_EXPIRES_IN=7d
 ```
+
+### Membuat user database khusus
+
+Disarankan **tidak memakai `root`** (tanpa password) untuk aplikasi. Buat user yang hanya punya akses ke database ini:
+
+```sql
+CREATE USER 'carewell'@'localhost' IDENTIFIED BY 'carewell123';
+CREATE USER 'carewell'@'127.0.0.1' IDENTIFIED BY 'carewell123';
+GRANT ALL PRIVILEGES ON carewell_clinic.* TO 'carewell'@'localhost';
+GRANT ALL PRIVILEGES ON carewell_clinic.* TO 'carewell'@'127.0.0.1';
+FLUSH PRIVILEGES;
+```
+
+> **Kenapa perlu?** Adminer menolak login dengan password kosong
+> ("Adminer does not support accessing a database without a password").
+> User dengan password juga membuat aplikasi tidak lagi berjalan sebagai `root`.
+>
+> Ganti `carewell123` dengan password yang lebih kuat untuk pemakaian nyata.
 
 > `.env` sudah masuk `.gitignore` — jangan pernah commit kredensial. Ganti `JWT_SECRET` dengan nilai acak:
 > `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`
@@ -86,6 +104,32 @@ npm run dev
 ```
 
 Buka `http://localhost:5173`.
+
+## Akses database
+
+**Adminer** (UI berbasis browser, sudah termasuk di Laragon):
+
+```
+http://localhost/adminer
+```
+
+| Kolom | Isi |
+|---|---|
+| System | `MySQL` |
+| Server | `127.0.0.1` |
+| Username | `carewell` |
+| Password | `carewell123` |
+| Database | `carewell_clinic` |
+
+**Terminal:**
+
+```powershell
+$mysql = "D:\Program\Laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysql.exe"
+& $mysql -u carewell -p carewell_clinic
+```
+
+**Catatan:** `mysql.exe` di Laragon tidak otomatis ada di PATH. Tambahkan folder `bin`-nya
+(`D:\Program\Laragon\bin\mysql\mysql-8.0.30-winx64\bin`) ke PATH bila ingin memanggil `mysql` langsung.
 
 ## Migrasi
 
